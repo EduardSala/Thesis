@@ -2,7 +2,7 @@
 # My Master of Sciences thesis 🎓
 
 
-# Abstract
+## Context 🌊
 
  The Offshore Renewable Energy sector continuously requires accurate data, particularly
  regarding significant wave height and wind speed, which are key variables necessary
@@ -16,6 +16,9 @@
  In this scenario, satellites play an important role as they are capable of acquiring accurate
  data with discrete temporal resolution.
  
+
+## Goals 🎯
+
  This thesis aims to evaluate the performance of satellite altimetry data by collocating it
  with fixed-point positions, between satellite altimetry data and in-situ data, using a spatio
  temporal matching method, exploring different criterions.
@@ -24,9 +27,9 @@
  in-situ data to improve the quality of satellite assimilated dataset, aligning it more closely
  with in-situ and and unlock their potential in providing environmental insights.
 
+## Workflow ⚡
 
-
-# Instructions
+## Instructions
 'Module_all_functions.py' contains all the functions that have been used in the whole project thesis.
 
 While 'Spatio_temporal.py' contains the  algorithm used to make the spatio-temporal analysis with the co-location techniques.
