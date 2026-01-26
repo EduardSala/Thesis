@@ -1,7 +1,6 @@
 
 # My Master of Sciences thesis 🎓
 
---
 
 # Abstract
 
@@ -25,7 +24,7 @@
  in-situ data to improve the quality of satellite assimilated dataset, aligning it more closely
  with in-situ and and unlock their potential in providing environmental insights.
 
---
+
 
 # Instructions
 'Module_all_functions.py' contains all the functions that have been used in the whole project thesis.
