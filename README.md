@@ -33,7 +33,7 @@
 graph TD
     %% Input
     SAT[Satellite Altimetry Data] --> START(( ))
-    INS[In-Situ Buoy Data] --> START
+    INS[In-Situ Mooring Data] --> START
     START --> SPACE{Spatial Matching}
 
     %% Sezione Spaziale
