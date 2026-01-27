@@ -32,44 +32,52 @@
 ```mermaid
 graph TD
     %% Input
-    SAT[Satellite Altimetry Data] --> START(( ))
-    INS[In-Situ Mooring Data] --> START
-    START --> SPACE{Spatial Matching}
+    SAT[Satellite Altimetry Data]
+    INS[In-Situ Mooring Data]
 
-    %% Sezione Spaziale
-    SPACE --> R30[Radius: 30 km]
-    SPACE --> R50[Radius: 50 km]
-    SPACE --> R70[Radius: 70 km]
-    
-    R30 & R50 & R70 --> S_METHODS[<b>Spatial Co-location Methods</b>]
+    %% Flusso Satellite (Spazio)
+    subgraph ST [ ]
+        direction TB
+        L1[<b>1a. Spatial Co-location</b>]
+        SAT --> R[Radii: 30, 50, 70 km]
+        R --> S_MET[Methods: Minimum Distance, IDW]
+    end
 
-    %% Sezione Temporale
-    S_METHODS --> TIME{Temporal Matching}
-    
-    TIME --> T15[Window: 15 min]
-    TIME --> T30[Window: 30 min]
-    TIME --> T60[Window: 60 min]
-    
-    T15 & T30 & T60 --> T_METHODS[<b>Temporal Co-location Methods</b>]
+    %% Flusso Mooring (Tempo)
+    subgraph TT [ ]
+        direction TB
+        L2[<b>1b. Temporal Co-location</b>]
+        INS --> W[Windows: 15, 30, 60 min]
+        W --> T_MET[Methods: Closest Obs., Mean Value]
+    end
 
-    %% Sezione Bias Correction
-    T_METHODS --> BC_START{Bias Correction Techniques}
-    
-    BC_START --> BC1[Full Distribution Mapping]
-    BC_START --> BC2[Quantile Mapping]
-    BC_START --> BC3[Linear Regression]
-    BC_START --> BC4[Delta Technique]
+    %% Punto di Sincronizzazione
+    S_MET --> SYNC([Spatio-Temporal Synchronization])
+    T_MET --> SYNC
 
-    %% Sezione Validazione (Metriche)
-    BC1 & BC2 & BC3 & BC4 --> VAL[<b>Data Validation</b>]
-    
-    VAL --> RMSE[RMSE]
-    VAL --> BIAS_M[BIAS]
-    VAL --> CC[CC]
-    VAL --> SI[SI]
+    %% Processing
+    subgraph CP [ ]
+        direction TB
+        L3[<b>2. Calibration </b>]
+        SYNC --> BC{Bias Correction Techniques}
+        BC --> BC1[Full Distribution Mapping]
+        BC --> BC2[Quantile Mapping]
+        BC --> BC3[Linear Regression]
+        BC --> BC4[Delta Technique]
+    end
 
-    %% Risultato Finale
-    RMSE & BIAS_M & CC & SI --> FINAL[/Final Calibrated Dataset/]
+    %% Output e Validazione
+    BC1 & BC2 & BC3 & BC4 --> SAVE[(Storage of all scenarios)]
+    
+    SAVE --> COMP{Comparison Analysis}
+
+    subgraph VR [ ]
+        direction TB
+        L4[<b>3. Validation & Performance</b>]
+        COMP --> METRICS["Statistical Parameters<br/>(RMSE, BIAS, CC, SI)"]
+    end
+
+    METRICS --> FINAL[/Identification of the most accurate configuration/]
 ```
 
 ## Repository Structure 📂
