@@ -29,11 +29,52 @@
 
 ## Workflow ⚡
 
-![Workflow](Screenshots/workflow.png)
+```mermaid
+graph TD
+    %% Input
+    SAT[Satellite Altimetry Data] --> START(( ))
+    INS[In-Situ Buoy Data] --> START
+    START --> SPACE{Spatial Matching}
 
-## Instructions
-'Module_all_functions.py' contains all the functions that have been used in the whole project thesis.
+    %% Sezione Spaziale
+    SPACE --> R30[Radius: 30 km]
+    SPACE --> R50[Radius: 50 km]
+    SPACE --> R70[Radius: 70 km]
+    
+    R30 & R50 & R70 --> S_METHODS[<b>Spatial Co-location Methods</b>]
 
-While 'Spatio_temporal.py' contains the  algorithm used to make the spatio-temporal analysis with the co-location techniques.
+    %% Sezione Temporale
+    S_METHODS --> TIME{Temporal Matching}
+    
+    TIME --> T15[Window: 15 min]
+    TIME --> T30[Window: 30 min]
+    TIME --> T60[Window: 60 min]
+    
+    T15 & T30 & T60 --> T_METHODS[<b>Temporal Co-location Methods</b>]
 
-Within 'calibration.py' 4 different Bias correction techniques have been applied to 10 satellite datasets (contains also different plots). 
+    %% Sezione Bias Correction
+    T_METHODS --> BC_START{Bias Correction Techniques}
+    
+    BC_START --> BC1[Full Distribution Mapping]
+    BC_START --> BC2[Quantile Mapping]
+    BC_START --> BC3[Linear Regression]
+    BC_START --> BC4[Delta Technique]
+
+    %% Sezione Validazione (Metriche)
+    BC1 & BC2 & BC3 & BC4 --> VAL[<b>Data Validation</b>]
+    
+    VAL --> RMSE[RMSE]
+    VAL --> BIAS_M[BIAS]
+    VAL --> CC[CC]
+    VAL --> SI[SI]
+
+    %% Risultato Finale
+    RMSE & BIAS_M & CC & SI --> FINAL[/Final Calibrated Dataset/]
+```
+
+## Repository Structure 📂
+
+- [`Module_all_functions.py`](./Module_all_functions.py): Core library containing all shared functions used across the project.
+- [`Spatio_temporal.py`](./Spatio_temporal.py): Implementation of the spatio-temporal matching algorithm and co-location logic.
+- [`calibration.py`](./calibration.py): Script for applying the 4 bias correction techniques and generating comparative plots for the 10 datasets.
+
