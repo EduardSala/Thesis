@@ -1,5 +1,8 @@
 
-# My Master of Sciences thesis 🎓
+# Master's thesis: Earth observation satellites for offshore wave and wind applications 🎓
+
+### 📢 **Status: Work in Progress** 
+*I am currently documenting the workflow and cleaning the code to better showcase the methodology used.*
 
 
 ## Context 🌊
