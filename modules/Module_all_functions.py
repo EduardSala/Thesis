@@ -26,6 +26,7 @@ path_lakes = "https://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html"
 
 def pass_filepath(folderPath:pathlib.Path) ->list[str]:
     """
+    
     Questa funzione prende il percorso di una cartella
     con dei file e mi ritorna ogni percorso di ogni file.
     :param folderPath:
@@ -37,8 +38,7 @@ def pass_filepath(folderPath:pathlib.Path) ->list[str]:
 
 def haversine(lon1:float, lat1:float, lon2:float, lat2:float) -> float:
     """
-    Questa funzione mi calcola con la Haversine function la distanza tra la posizione
-    fissa della boa e la posizione proiettata del satellite sulla terra.
+    This function calculates the distance between the mooring location and the projected position by the satellite on Earth, using Haversine function.
     :param lon1: Longitudine del corpo 1
     :param lat1: Latitudine del corpo 1
     :param lon2: Longitudine del corpo 2
