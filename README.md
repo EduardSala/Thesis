@@ -1,5 +1,8 @@
 
-# My Master of Sciences thesis 🎓
+# Earth observation satellites for offshore wave and wind applications 🎓
+
+### 📢 **Status: Work in Progress** 
+*I am currently documenting the workflow and cleaning the code to better showcase the methodology used.*
 
 
 ## Context 🌊
@@ -26,6 +29,7 @@
  Moreover, several bias correction techniques are applied to calibrate satellite data against
  in-situ data to improve the quality of satellite assimilated dataset, aligning it more closely
  with in-situ and and unlock their potential in providing environmental insights.
+
 
 ## Workflow ⚡
 
@@ -87,6 +91,8 @@ graph TD
     %% Output Finale
     METRICS --> FINAL{{"<b>🏆 OPTIMAL CONFIGURATION</b><br/>Most Accurate Methodology Identification"}}
 ```
+
+
 
 ## Repository Structure 📂
 
