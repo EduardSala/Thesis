@@ -3,23 +3,20 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-import filtering
 from sklearn import linear_model
 import sklearn.metrics as metrics
 import statistics
 import scipy
 import seaborn as  sns
-import filtering2
-import filtering2 as flt
+from modules import Module_all_functions as flt
 from scipy.stats import gaussian_kde
 
 plt.rcParams['xtick.labelsize'] = 26
 plt.rcParams['ytick.labelsize'] = 26
 
 #fp_platf = flt.pass_filepath(r"platfCSV_hs")
-fp_platf = flt.pass_filepath(r"platfCSV_wind")
-fp_sat = r""
-
+fp_sat = "../datasets/ds_S6A_wave.csv"
+dataframe_test = flt.save_Sat_data(fp_sat,"VAVH")
 start='2021-01-01'
 end='2024-01-01'
 

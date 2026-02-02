@@ -32,7 +32,7 @@ def pass_filepath(folderPath:pathlib.Path) ->list[str]:
     :param folderPath:
     :return: filePath
     """
-    filepath = [os.path.join(folderPath, name) for name in os.listdir(folderPath)]
+    filePath = [os.path.join(folderPath, name) for name in os.listdir(folderPath)]
     return filePath
 
 
@@ -74,7 +74,7 @@ def save_Sat_data(filePath_sat_data:pathlib.Path,variable) -> pd.DataFrame:
     """
 
     #filepath_sat_data = [os.path.join(folderPath_sat,name) for name in os.listdir(folderPath_sat)]
-    df =  pd.read_csv(filepath_sat_data)
+    df =  pd.read_csv(filePath_sat_data,skiprows=5)
     time = pd.to_datetime(df[df['parameter']==variable]['time'])
     var = df[df['parameter']==variable]['value'].values
     lon = df[df['parameter']==variable]['longitude'].values
