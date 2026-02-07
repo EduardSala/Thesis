@@ -23,7 +23,7 @@ for fp in file_paths:
     print(f"Processing {fp.name}")
 
     try:
-        df = load_data.load_moor_data_nc(fp, cfg_var, cfg_field, cfg_deph)
+        df = load_data.load_moor_data_nc(fp, cfg_var, cfg_deph)
         data_extr.export_dataframe_to_file(df, cfg_field, output_dir)
     # managing errors when the file is not processed
     except Exception as e:
