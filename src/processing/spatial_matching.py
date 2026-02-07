@@ -2,10 +2,9 @@ import pandas as pd
 import numpy as np
 
 
+def calc_haversine(lat_mooring: float, lon_mooring: float, lat_sat: np.ndarray, lon_sat: np.ndarray) -> np.ndarray:
 
-def calc_haversine(lat_mooring: float,lon_mooring: float,lat_sat: np.ndarray,lon_sat: np.ndarray)-> np.ndarray:
-
-    R = 6371.0   # Earth radius
+    r = 6371.0   # Earth radius
 
     lat1, lon1 = np.radians(lat_mooring), np.radians(lon_mooring)
     lat2, lon2 = np.radians(lat_sat), np.radians(lon_sat)
@@ -16,10 +15,10 @@ def calc_haversine(lat_mooring: float,lon_mooring: float,lat_sat: np.ndarray,lon
     a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
     c = 2 * np.arcsin(np.sqrt(a))
 
-    return R * c  # Distance in km
+    return r * c  # Distance in km
+
+
 def spatial_cross(df_s: pd.DataFrame, df_m: pd.DataFrame, cross_radius: float) -> pd.DataFrame:
-
-
 
     df_mooring = df_m
     df_sat = df_s
@@ -30,10 +29,10 @@ def spatial_cross(df_s: pd.DataFrame, df_m: pd.DataFrame, cross_radius: float) -
     lat_mooring = df_mooring['latitude'].iloc[0]
     lon_mooring = df_mooring['longitude'].iloc[0]
 
-    distance = calc_haversine(lat_mooring,lon_mooring, lat_sat, lon_sat)
+    distance = calc_haversine(lat_mooring, lon_mooring, lat_sat, lon_sat)
     dist_filtered_idx = np.where(distance <= cross_radius)
 
-    if (len(dist_filtered_idx[0]) == 0):
+    if len(dist_filtered_idx[0]) == 0:
         return pd.DataFrame()
 
     else:
@@ -46,14 +45,16 @@ def spatial_cross(df_s: pd.DataFrame, df_m: pd.DataFrame, cross_radius: float) -
 
         df_sat = df_sat.iloc[dist_filtered_idx[0]].copy()
         df_sat['N_cross'] = i_th_cross
-        df_sat['mooring_ref'] = np.full(len(dist_filtered_idx[0]),df_mooring['platfID'].iloc[0])
+        df_sat['mooring_ref'] = np.full(len(dist_filtered_idx[0]), df_mooring['platfID'].iloc[0])
         df_sat['distance'] = distance[dist_filtered_idx[0]]
 
-        #print(f"Satellite has {(df_sat['N_cross'].iloc[-1]).astype(int)} cross-over points with {df_mooring['platfID'].iloc[0]}!")
+        # print(f"Satellite has {(df_sat['N_cross'].iloc[-1]).astype(int)} cross-over points with
+        # {df_mooring['platfID'].iloc[0]}!")
 
         return df_sat.reset_index(drop=True)
 
-def spatial_coLoc_min_dist(df_sat_after_cross:pd.DataFrame) -> pd.DataFrame:
+
+def spatial_co_loc_min_dist(df_sat_after_cross: pd.DataFrame) -> pd.DataFrame:
 
     ncross_unique = np.unique(df_sat_after_cross['N_cross']).astype(int)
     df_sat_after_cross['N_cross'] = (df_sat_after_cross['N_cross']).astype(int)
@@ -65,14 +66,7 @@ def spatial_coLoc_min_dist(df_sat_after_cross:pd.DataFrame) -> pd.DataFrame:
 
 def spatial_matching(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, cross_radius: float) -> pd.DataFrame:
 
-    df_sat_stp1 = spatial_cross(df_sat,df_mooring,cross_radius)
+    df_sat_stp1 = spatial_cross(df_sat, df_mooring, cross_radius)
     if df_sat_stp1.empty:
         return pd.DataFrame()
-    return spatial_coLoc_min_dist(df_sat_stp1)
-
-
-
-
-
-
-
+    return spatial_co_loc_min_dist(df_sat_stp1)

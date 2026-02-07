@@ -1,18 +1,17 @@
 import pandas as pd
 import xarray as xr
 import numpy as np
-from pathlib import Path
 
 
-def load_satData_csv(filepath_sat_csv,var_name):
+def load_sat_data_csv(filepath_sat_csv, var_name):
 
-    dataframe_sat_in = pd.read_csv(filepath_sat_csv,skiprows=5)
-    df_sat = dataframe_sat_in[dataframe_sat_in['parameter']==var_name]
+    dataframe_sat_in = pd.read_csv(filepath_sat_csv, skiprows=5)
+    df_sat = dataframe_sat_in[dataframe_sat_in['parameter'] == var_name]
     df_sat_out = pd.DataFrame(
         {
             'platfID': np.full(len(df_sat), str(df_sat['platformId'].iloc[0])),
 
-            'time': np.array(df_sat['time'].values,dtype='datetime64[ns]'),
+            'time': np.array(df_sat['time'].values, dtype='datetime64[ns]'),
 
             'latitude': df_sat['latitude'].values,
 
@@ -23,14 +22,15 @@ def load_satData_csv(filepath_sat_csv,var_name):
             'valueQC': df_sat['valueQc'].values
         }
     )
-    #print("Satellite data has been loaded!")
+    # print("Satellite data has been loaded!")
     return df_sat_out
 
-def load_moorData_nc(filepath_file_nc,var_name,field,deph_val,deph_tol=0.1):
+
+def load_moor_data_nc(filepath_file_nc, var_name, deph_val):
 
     with xr.open_dataset(filepath_file_nc) as dataset_nc:
         if var_name in dataset_nc.data_vars:
-            cond = (dataset_nc['DEPH'].values >= deph_val - deph_tol) & (dataset_nc['DEPH'].values <= deph_val + deph_tol)
+            cond = (dataset_nc['DEPH'].values >= deph_val) & (dataset_nc['DEPH'].values <= deph_val)
             idx = np.where(cond)[0]
             # ----------------------------------------------
             if idx.size > 0:
@@ -43,17 +43,14 @@ def load_moorData_nc(filepath_file_nc,var_name,field,deph_val,deph_tol=0.1):
                 dataframe_mooring = pd.DataFrame(
                     {
                         'platfID': np.full(len(time), mooring_name),
-                        'time': np.array(time,dtype='datetime64[ns]'),
+                        'time': np.array(time, dtype='datetime64[ns]'),
                         'latitude': np.full(len(time), latitude),
                         'longitude': np.full(len(time), longitude),
-                         var_name: variable
+                        var_name: variable
                     }
                 )
-
-
-
-            #print("In-situ data has been extracted!")
+            # print("In-situ data has been extracted!")
             return dataframe_mooring
         else:
-            #print("No dataframe has been extracted!")
+            # print("No dataframe has been extracted!")
             return None

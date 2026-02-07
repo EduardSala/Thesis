@@ -1,7 +1,7 @@
-from modules import export_data_to_csv as data_extr
+from io_data import export_data_to_csv as data_extr
+from io_data import load_dataframe as load_data
 from pathlib import Path
-from modules import load_configuration
-import os
+from config import load_configuration
 
 
 # loading config file
@@ -23,19 +23,8 @@ for fp in file_paths:
     print(f"Processing {fp.name}")
 
     try:
-        df = data_extr.extr_insitu_data_from_nc(fp, cfg_var, cfg_field, cfg_deph, cfg_tol)
-        data_extr.exp_dataframe_to_file(df, cfg_field, output_dir)
+        df = load_data.load_moor_data_nc(fp, cfg_var, cfg_field, cfg_deph)
+        data_extr.export_dataframe_to_file(df, cfg_field, output_dir)
     # managing errors when the file is not processed
     except Exception as e:
         print(f"Error processing {fp.name}: {e}")
-
-
-
-
-
-
-
-
-
-
-
