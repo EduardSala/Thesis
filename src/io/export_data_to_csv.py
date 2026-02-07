@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from pathlib import Path
 
-def exp_dataframe_to_file(dataframe_insitu,field,dir_output):
+def export_dataframe_to_file(dataframe_insitu,field,dir_output):
 
     dir_output = Path(dir_output)
     dir_output.mkdir(parents=True, exist_ok=True)

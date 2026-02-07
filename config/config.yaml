@@ -9,9 +9,9 @@ extraction:
     tol: 0.5  # value expressed in meters
 
   dir_paths:
-    dir_input_mooring_nc: "../datasets/moorings-nc"
-    dir_output_mooring_csv: "../datasets/moorings-csv"
-    dir_input_sat_csv: "../datasets/satellite-csv"
+    dir_input_mooring_nc: ../datasets/moorings-nc
+    dir_output_mooring_csv: ../datasets/moorings-csv
+    dir_input_sat_csv: ../datasets/satellite-csv
 
 
 spatio_temp_matching:
