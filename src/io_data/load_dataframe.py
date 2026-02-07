@@ -49,8 +49,11 @@ def load_moor_data_nc(filepath_file_nc, var_name, deph_val):
                         var_name: variable
                     }
                 )
-            # print("In-situ data has been extracted!")
-            return dataframe_mooring
+                # print("In-situ data has been extracted!")
+                return dataframe_mooring
+            else:
+                # No matching depth found for the requested deph_val
+                return None
         else:
             # print("No dataframe has been extracted!")
             return None

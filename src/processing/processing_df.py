@@ -57,4 +57,6 @@ def spatio_temp_matching(params):
         mooring_list.append(df_mooring_final)
         sat_list.append(df_sat_final)
 
-    return pd.concat(sat_list), pd.concat(mooring_list)
+    if not sat_list or not mooring_list:
+        return pd.DataFrame(), pd.DataFrame()
+    return pd.concat(sat_list, ignore_index=True), pd.concat(mooring_list, ignore_index=True)
