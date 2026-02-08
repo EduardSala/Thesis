@@ -1,0 +1,27 @@
+# config.yaml
+
+extraction:
+
+  variable:
+    var_name: "VAVH"
+    field: "wave"
+    deph_val: 0  # value expressed in meters
+    tol: 0.5  # value expressed in meters
+
+  dir_paths:
+    dir_input_mooring_nc: ../datasets/moorings-nc
+    dir_output_mooring_csv: ../datasets/moorings-csv
+    dir_input_sat_csv: ../datasets/satellite-csv
+
+
+spatio_temp_matching:
+
+  variable:
+    cross_radius:
+    cross_time:
+    var_name:
+    dist_tol:  # value expressed in °
+
+  dir_paths:
+    dir_input_mooring_csv: "../datasets/mooring-csv"
+    dir_inout_satellite_csv: "../datasets/satellite-csv"
