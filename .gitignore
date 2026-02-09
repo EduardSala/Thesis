@@ -2,4 +2,3 @@
 dev/
 venv/
 *.pyc
-src/__init__.py
