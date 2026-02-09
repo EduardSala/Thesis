@@ -1,14 +1,15 @@
 import pandas as pd
 
 
-def calib_df_first_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def calib_df_first_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
+        -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Calibrates the satellite data using the first ten days of mooring data as the calibration set and the remaining
     days as the validation set. The function creates boolean masks based on the day of the month extracted from the
     `time` column in `df_mooring`, and applies these masks to both `df_mooring` and `df_sat` to create the respective
     calibration and validation DataFrames.
 
-    Args:
+    Parameters:
         df_mooring (pd.DataFrame): DataFrame containing mooring data.
         df_sat (pd.DataFrame): DataFrame containing satellite data.
     Returns:
@@ -43,14 +44,16 @@ def calib_df_first_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) -> t
     return df_mooring_cal, df_sat_cal, df_mooring_val, df_sat_val
 
 
-def calib_df_last_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame):
+def calib_df_last_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
+        -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+
     """
      Calibrates the satellite data using the last ten days of mooring data as the calibration set and the remaining
      days as the validation set. The function creates boolean masks based on the day of the month extracted from the
      `time` column in `df_mooring`, and applies these masks to both `df_mooring` and `df_sat` to create the respective
      calibration and validation DataFrames.
 
-     Args:
+     Parameters:
          df_mooring (pd.DataFrame): DataFrame containing mooring data.
          df_sat (pd.DataFrame): DataFrame containing satellite data.
      Returns:

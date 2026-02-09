@@ -1,8 +1,19 @@
 from pathlib import Path
+import pandas as pd
 
 
-def export_dataframe_to_file(dataframe_insitu, field, dir_output):
+def export_dataframe_to_file(dataframe_insitu: pd.DataFrame, field: str, dir_output: str | Path) -> None:
+    """
+    Export the in-situ DataFrame to a CSV file in the specified output directory.
+    The filename is constructed using the mooring name and the field name.
+    Args:
+        dataframe_insitu: DataFrame containing the in-situ data to be exported.
+        field: Field name to be included in the output filename. Wave or wind.
+        dir_output: Directory where the output file will be saved. Can be a string or a Path object.
 
+    Returns:
+        None
+    """
     dir_output = Path(dir_output)
     dir_output.mkdir(parents=True, exist_ok=True)
 
