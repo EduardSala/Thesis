@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import yaml
+
 from io_data import load_dataframe as load_data
 from processing import spatial_matching as spatial_match
 from processing import temporal_matching as temp_match
@@ -7,8 +9,17 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-def align_dataframes(df_sat, df_mooring):
+def align_dataframes(df_sat: pd.DataFrame, df_mooring: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Aligns the satellite and mooring dataframes based on their common cross-over points.
+    Args:
+        df_sat: DataFrame containing satellite data with a column 'N_cross' representing cross-over points.
+        df_mooring: DataFrame containing mooring data with a column 'N_cross' representing cross-over points.
 
+    Returns:
+        A tuple containing the aligned satellite and mooring dataframes, filtered to include only rows with common
+        cross-over points.
+    """
     common_cross = np.intersect1d(list(df_mooring['N_cross']), list(df_sat['N_cross']))
 
     df_mooring_final = df_mooring[df_mooring['N_cross'].isin(common_cross)].reset_index(drop=True)
@@ -17,8 +28,20 @@ def align_dataframes(df_sat, df_mooring):
     return df_sat_final, df_mooring_final
 
 
-def spatio_temp_matching(params):
+def spatio_temp_matching(params: yaml.YAMLObject) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+        Performs spatio-temporal matching between satellite and mooring data based on the provided
+        configuration parameters.
+    Args:
+        params: A dictionary containing configuration parameters for the spatio-temporal matching process, including
+                directory paths for input satellite CSV files and mooring NetCDF files, variable names,
+                cross-matching criteria (spatial radius and temporal window), and other relevant settings.
 
+    Returns:
+        A tuple containing two DataFrames: the first with the matched satellite data and the second with the
+        corresponding mooring data. If no matches are found, both DataFrames will be empty.
+    """
+    
     dir_path_sat = Path(params['dir_paths']['dir_input_sat_csv'])
     dir_path_mooring = Path(params['dir_paths']['dir_input_mooring_nc'])
     fp_single_file_sat = Path(params['dir_paths']['path_sat_singleFile'])
