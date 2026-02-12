@@ -106,7 +106,7 @@ def spatial_co_loc_min_dist(df_sat_after_cross: pd.DataFrame) -> pd.DataFrame:
         Haversine distance to the mooring point
     """
 
-    ncross_unique = np.unique(df_sat_after_cross['N_cross']).astype(int)
+    # ncross_unique = np.unique(df_sat_after_cross['N_cross']).astype(int)
     df_sat_after_cross['N_cross'] = (df_sat_after_cross['N_cross']).astype(int)
     min_dist_idx = df_sat_after_cross.groupby('N_cross')['distance'].idxmin()
     df_sat = df_sat_after_cross.loc[min_dist_idx]

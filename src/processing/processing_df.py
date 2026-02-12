@@ -41,38 +41,46 @@ def spatio_temp_matching(params: yaml.YAMLObject) -> tuple[pd.DataFrame, pd.Data
         A tuple containing two DataFrames: the first with the matched satellite data and the second with the
         corresponding mooring data. If no matches are found, both DataFrames will be empty.
     """
-    
-    dir_path_sat = Path(params['dir_paths']['dir_input_sat_csv'])
-    dir_path_mooring = Path(params['dir_paths']['dir_input_mooring_nc'])
-    fp_single_file_sat = Path(params['dir_paths']['path_sat_singleFile'])
+    cfg_params0 = params['data_extraction']
+    cfg_params1 = params['spatio_temp_matching']
+
+    cfg_dir_path_sat = cfg_params0['dir_paths']['dir_input_sat_csv']
+    cfg_dir_path_mooring = cfg_params0['dir_paths']['dir_input_mooring_nc']
+
+    cfg_var_name = cfg_params1['variable']['var_name']
+    cfg_depth_val = cfg_params0['variable']['depth_val']
+    cfg_cross_radius = cfg_params1['variable']['cross_radius']
+    cfg_cross_time_val = cfg_params1['variable']['cross_time_val']
+    cfg_cross_time_unit = cfg_params1['variable']['cross_time_unit']
+
+    dir_path_sat = Path(cfg_dir_path_sat)
+    dir_path_mooring = Path(cfg_dir_path_mooring)
 
     mooring_list = []
     sat_list = []
 
     list_path_mooring = list(dir_path_mooring.glob("*.nc"))
-
+    print(list_path_mooring)
     for fp in tqdm(list_path_mooring, desc="Spatio-temporal matching progress"):
 
-        df_sat = load_data.load_sat_data_csv(fp_single_file_sat, params['extraction']['var_name'])
-        df_mooring = load_data.load_moor_data_nc(fp, params['extraction']['var_name'],
-                                                 params['extraction']['deph_val'])
+        df_sat = load_data.load_sat_data_csv(dir_path_sat, cfg_var_name)
+        df_mooring = load_data.load_moor_data_nc(fp, cfg_var_name, cfg_depth_val)
         df_sat_spatial_cross = spatial_match.spatial_matching(
-            df_sat, df_mooring, params['crossMatching']['cross_radius'])
+            df_sat, df_mooring, cfg_cross_radius)
 
         if df_sat_spatial_cross.empty:
             # print(f"Satellite has no cross-over points with {df_mooring['platfID'].iloc[0]}!")
             continue
         # <------------------------------------------------------------------------------------------------------------>
         df_mooring_temporal_cross = temp_match.temporal_matching(
-            df_sat_spatial_cross, df_mooring, params['crossMatching']['cross_time_val'],
-            params['crossMatching']['cross_time_unit'])
+            df_sat_spatial_cross, df_mooring, cfg_cross_time_val, cfg_cross_time_unit)
 
         if df_mooring_temporal_cross.empty:
             # print(f"{df_mooring['platfID'].iloc[0]} has no data matching time-wise with satellite!")
             continue
         # <------------------------------------------------------------------------------------------------------------>
         df_sat_final, df_mooring_final = align_dataframes(df_sat_spatial_cross, df_mooring_temporal_cross)
-        mask_nan = np.isnan(df_mooring_final[params['crossMatching']['var_name']])
+        mask_nan = np.isnan(df_mooring_final[cfg_var_name])
         idx_nan = (np.where(mask_nan)[0])
         df_mooring_final = df_mooring_final.drop(idx_nan)
         df_sat_final = df_sat_final.drop(idx_nan)

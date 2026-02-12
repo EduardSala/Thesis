@@ -41,11 +41,11 @@ def load_sat_data_csv(filepath_sat_csv: str | Path, var_name: str) -> pd.DataFra
             'valueQC': df_sat['valueQc'].values
         }
     )
-    # print("Satellite data has been loaded!")
+    print("Satellite data has been loaded!")
     return df_sat_out
 
 
-def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, deph_val: int) -> pd.DataFrame | None:
+def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, depth_val: float) -> pd.DataFrame | None:
     """
     Load mooring data from a NetCDF file, filter it by the specified variable name and depth value,
     and return a DataFrame with relevant columns. If the variable name is not found
@@ -67,7 +67,7 @@ def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, deph_val: int
     """
     with xr.open_dataset(filepath_file_nc) as dataset_nc:
         if var_name in dataset_nc.data_vars:
-            cond = (dataset_nc['DEPH'].values >= deph_val) & (dataset_nc['DEPH'].values <= deph_val)
+            cond = abs(dataset_nc['DEPH'].values - depth_val) <= 0.5
             idx = np.where(cond)[0]
             # ----------------------------------------------
             if idx.size > 0:
@@ -86,11 +86,10 @@ def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, deph_val: int
                         var_name: variable
                     }
                 )
-                # print("In-situ data has been extracted!")
+                print("In-situ data has been extracted!")
                 return dataframe_mooring
             else:
-                # No matching depth found for the requested deph_val
                 return None
         else:
-            # print("No dataframe has been extracted!")
+            print("No dataframe has been extracted!")
             return None
