@@ -3,16 +3,22 @@ import pandas as pd
 from calibration import calibration_methods as cal_mthd
 
 
-def ecdf(x: np.ndarray):
+def ecdf(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Computes the empirical cumulative distribution function (ECDF) for a given array of data. The ECDF is a step function that represents the proportion of data points that are less than or equal to a given value. It is calculated by sorting the data and assigning quantiles based on the rank of each data point.
+
+    Parameters:
+        x: Vector of data points for which to compute the ECDF.
+
+    Returns:
+        A tuple containing two arrays: the first array contains the sorted data points (bins), and the second array contains the corresponding quantiles (proportions) for each data point.
+    """
     bins = np.sort(x)
-    quantiles = np.arange(1, len(bins) + 1 / len(bins))
+    quantiles = np.arange(1, len(bins) + 1) / len(bins)
     return bins, quantiles
 
 
 def linear_cal(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) -> pd.DataFrame:
-    """
-    Calibrates a satellite variable using the first 10 days of reference mooring data, then applies the linear
-    transformation to the calibration dataset. The coefficients b and a are applied to the satellite validation dataset.
+    """Calibrates the satellite validation dataset using a linear regression method. The method fits a linear model to the calibration datasets and applies the resulting coefficients to adjust the satellite validation dataset.
 
     Parameters:
         df_sat (pd.DataFrame): DataFrame containing satellite data.
@@ -38,10 +44,9 @@ def linear_cal(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) ->
 
 
 def delta_cal(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) -> pd.DataFrame:
-    """
-    Bias correction method that calculates the mean difference (delta) between the satellite and mooring data for the
-    first 10 days of calibration, then applies this delta to adjust the satellite validation dataset.
-    Args:
+    """Bias correction method that calculates the mean difference (delta) between the satellite and mooring data, then applies this delta to adjust the satellite validation dataset.
+
+    Parameters:
         df_sat: DataFrame containing satellite data.
         df_mooring: DataFrame containing mooring data.
         variable: Variable name to calibrate.
@@ -64,12 +69,13 @@ def delta_cal(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) -> 
 
 
 def fdm_correction(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) -> pd.DataFrame:
-    """
-    Full Distribution Mapping (FDM) bias correction method that adjusts the satellite validation dataset based on the
-    cumulative distribution functions (CDFs) of the calibration datasets. The method involves interpolating the
-    satellite calibration CDF to the mooring calibration CDF, calculating the quantile differences, fitting a
-    polynomial to these differences, and applying the correction to the satellite validation dataset.
-    Args:
+    """Full Distribution Mapping (FDM) is bias correction method that adjusts the satellite validation dataset based
+    on the cumulative distribution functions (CDFs) of the calibration datasets. The method involves interpolating the
+    satellite calibration CDF to the mooring calibration CDF and then calculating the quantile differences. After
+    that a polynomial interpolation is applied to these differences, which returns correction coefficients. These
+    factors are then applied to the satellite validation dataset.
+
+    Parameters:
         df_sat: DataFrame containing satellite data.
         df_mooring: DataFrame containing mooring data.
         variable: Variable name to calibrate.
@@ -104,13 +110,12 @@ def fdm_correction(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str
 
 
 def qm_correction(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, variable: str) -> pd.DataFrame:
-    """
-    Quantile Mapping (QM) bias correction method that adjusts the satellite validation dataset based on the quantiles of the calibration datasets. The
-    method involves dividing the calibration datasets into quantiles, calculating the CDFs for each quantile, interpolating the satellite calibration CDF to the mooring calibration CDF for each quantile, calculating the quantile differences, fitting a polynomial to these differences, and applying the correction to the satellite validation dataset for each quantile.
+    """Quantile Mapping (QM) is bias correction method that adjusts the satellite validation dataset based on the quantiles of the calibration datasets. The
+    method involves dividing the calibration datasets into quantiles, calculating the CDFs for each quantile and then interpolating the satellite calibration CDF to the mooring calibration CDF for each quantile. After the interpolation, quantile differences are calculated, and fitted with a polynomial of 2nd degree, which return the correction factors and applying themto the satellite validation dataset for each quantile.
 
     This method allows for a more detailed correction that accounts for differences in the distribution of the data across different quantiles, potentially improving the accuracy of the bias correction, especially when the relationship between the satellite and mooring data is not linear or when there are significant differences in the distribution of the data across different quantiles.
 
-    Args:
+    Parameters:
         df_sat: DataFrame containing satellite data.
         df_mooring: DataFrame containing mooring data.
         variable: Variable name to calibrate.
