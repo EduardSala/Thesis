@@ -60,7 +60,6 @@ def spatio_temp_matching(params: yaml.YAMLObject) -> tuple[pd.DataFrame, pd.Data
     sat_list = []
 
     list_path_mooring = list(dir_path_mooring.glob("*.nc"))
-    print(list_path_mooring)
     for fp in tqdm(list_path_mooring, desc="Spatio-temporal matching progress"):
 
         df_sat = load_data.load_sat_data_csv(dir_path_sat, cfg_var_name)

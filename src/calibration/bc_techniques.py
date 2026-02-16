@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
-from calibration import calibration_methods as cal_mthd
+import yaml
+from . import metrics
+from . import calibration_methods as cal_mthd
 
 
 def ecdf(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -97,7 +99,7 @@ def fdm_correction(df_sat_cal: pd.DataFrame, df_mooring_cal: pd.DataFrame, df_sa
 
     bias_corrected_fm = np.interp(x=cdf_cal_mooring, xp=cdf_cal_sat, fp=y_cal_sorted)
     x_q_fm = x_cal_sorted - bias_corrected_fm
-    coef_p_fm = np.polyfit(bias_corrected_fm, x_q_fm, deg=2)
+    coef_p_fm = np.polyfit(bias_corrected_fm, x_q_fm, deg=1)
     y_val_corrected = np.polyval(coef_p_fm, y_val) + y_val
 
     df_sat_val[variable] = y_val_corrected
@@ -141,7 +143,7 @@ def qm_correction(df_sat_cal: pd.DataFrame, df_mooring_cal: pd.DataFrame, df_sat
 
         bias_corrected = np.interp(x=cdf_cal_mooring, xp=cdf_cal_sat, fp=y_cal_sorted)
         x_q = x_cal_sorted - np.sort(bias_corrected)
-        coef_p = np.polyfit(bias_corrected, x_q, deg=3)
+        coef_p = np.polyfit(bias_corrected, x_q, deg=0)
 
         values_corrected = np.polyval(coef_p, df_sat_val[variable].loc[mask_sat_val]) + df_sat_val[variable].loc[
             mask_sat_val]
@@ -149,3 +151,48 @@ def qm_correction(df_sat_cal: pd.DataFrame, df_mooring_cal: pd.DataFrame, df_sat
 
     return df_sat_val.copy()
 
+
+def bias_correction(cfg: yaml.YAMLObject, dataframes: list) -> dict:
+    """
+    Performs bias correction on the satellite validation dataset using the specified techniques and evaluates the results using various metrics. The function takes a configuration dictionary that specifies which bias correction techniques to apply and a list of DataFrames containing the calibration and validation data for both satellite and mooring datasets.
+
+    Parameters:
+        cfg: Configuration dictionary containing parameters for bias correction techniques and spatio-temporal matching.
+        dataframes: A list of DataFrames in the following order: [sdf_sat_cal, df_mooring_cal, df_sat_val, df_mooring_val]
+    Returns:
+        A dictionary containing the results of the bias correction techniques, including the corrected satellite validation DataFrames and the corresponding metrics for each technique.
+    """
+    var_name = cfg['spatio_temp_matching']['variable']['var_name']
+
+    df_sat_cal = dataframes[0].copy()
+    df_mooring_cal = dataframes[1].copy()
+    df_sat_val = dataframes[2].copy()
+    df_mooring_val = dataframes[3].copy()
+
+    methods = {
+        "delta": delta_cal,
+        "linear": linear_cal,
+        "fdm": fdm_correction,
+        "qm": qm_correction,
+    }
+    technique =  cfg['bias_correction_techniques']['technique']
+    if technique == "all":
+        to_run = methods
+    else:
+        to_run = {technique: methods[technique]}
+
+    results = {
+        "no_correction": {
+            "df_sat_val": df_sat_val,
+            "metrics": metrics.metrics_array(df_mooring_val, df_sat_val, var_name)
+        }
+    }
+
+    for name, func in to_run.items():
+        df_sat_corrected = func(df_sat_cal, df_mooring_cal, df_sat_val, df_mooring_val, var_name)
+        results[name] = {
+            "df_sat_val": df_sat_corrected,
+            "metrics": metrics.metrics_array(df_mooring_val, df_sat_corrected, var_name)
+        }
+
+    return results
