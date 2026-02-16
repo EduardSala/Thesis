@@ -7,7 +7,7 @@ data_extraction:
   dir_paths:
     dir_input_mooring_nc: ../data/example/moorings_nc
     dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
+    dir_input_sat_csv: ../data/example/satellite_csv/cmems_obs-wave_glo_phy-swh_nrt_s6a-l3_PT1S_1769379192455.csv
 # ---------------------------------------------------------------------
 spatio_temp_matching:
   variable:
@@ -17,6 +17,8 @@ spatio_temp_matching:
     cross_time_unit: 'm' # m / h / s
   dir_paths:
     dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
-
-
+    dir_input_sat_csv: data/example/satellite_csv/cmems_obs-wave_glo_phy-swh_nrt_s6a-l3_PT1S_1769379192455.csv
+# ---------------------------------------------------------------------
+bias_correction_techniques:
+  technique: "linear" # "fdm" | "delta" | "qm" | "linear" ! "all"
+  output_dir: ../data/example/outputdata
