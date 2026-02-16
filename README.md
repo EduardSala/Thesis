@@ -4,6 +4,38 @@
 ### 📢 **Status: Work in Progress** 
 *I am currently documenting the workflow and cleaning the code to better showcase the methodology used.*
 
+## 🎯 Objective
+This projects aims to improve accuracy and reliability of satellite data for offshore wave and wind applications. The goal is to apply several bias correction techniques to calibrate satellite data against in-situ data and evaluate which technique performs best.
+
+## ✅ What this project does
+-	**Spatial** and **temporal** **matching** to align satellite and in-situ data so that both data can be compared
+-	To **reduce bias** in a dataset (i.e., to apply a bias correction technique), the dataset must be split into two parts: a _calibration dataset_, used to determine the calibration factors, and a _validation dataset_, used to validate the technique
+-	In this project four BC techniques are presented: **_Delta method_**, **_Linear calibration_**, **_Full Distribution Mapping_** and **_Quantile Mapping_**
+-	Export the final datasets as _.csv_ files for future use and make data analysis
+
+## Quick Start
+1) Create a virtual environment  
+```bash
+python -m venv venv
+```
+
+2) Activate it (Windows)  
+```bash
+venv\Scripts\activate
+```
+
+3) Install requirements  
+```bash
+pip install -r requirements.txt
+```
+
+4) Edit configuration  
+`config/config.yaml`
+
+5) Run the pipeline  
+```bash
+python scripts/main.py
+```
 
 ## Context 🌊
 
