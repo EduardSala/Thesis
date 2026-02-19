@@ -25,6 +25,68 @@ This projects aims to improve accuracy and reliability of satellite data for off
 -	In this project four BC techniques are presented: **_Delta method_**, **_Linear calibration_**, **_Full Distribution Mapping_** and **_Quantile Mapping_**
 -	Export the final datasets as _.csv_ files for future use and make data analysis
 
+## ⚡ Workflow 
+<details>
+<summary>Workflow diagram</summary>
+
+```mermaid
+graph TD
+    SAT["<b>🛰️ SATELLITE ALTIMETRY</b><br/><i>Remote Sensing Dataset</i>"]
+    INS["<b>⚓ MOORING DATA</b><br/><i>In-Situ Observations</i>"]
+
+    subgraph " "
+        direction TB
+        L1["<div style='font-size:16px'><b>PHASE 1: SPATIO-TEMPORAL ALIGNMENT</b></div>"]
+        
+        subgraph "1a. Spatial Matching"
+            direction TB
+            SAT --> R{"Cross Radii"}
+            R --> R_OPT["• 30 km<br/>• 50 km<br/>• 70 km"]
+            R_OPT --> S_MET["<b>Spatial Methods</b><br/>• Minimum Distance<br/>• IDW Interpolation"]
+        end
+        subgraph "1b. Temporal Matching"
+            direction TB
+            INS --> W{"Time Window"}
+            W --> W_OPT["• 15 min<br/>• 30 min<br/>• 60 min"]
+            W_OPT --> T_MET["<b>Temporal Methods</b><br/>• Closest Observation<br/>• Mean Value Analysis"]
+        end
+    end
+
+    S_MET --> SYNC([<b>⚡ SPATIO-TEMPORAL MATCH-UP</b>])
+    T_MET --> SYNC
+
+    subgraph " "
+        direction TB
+        L3["<div style='font-size:16px'><b>PHASE 2: CALIBRATION & BIAS CORRECTION</b></div>"]
+        
+        SYNC --> BC{"Correction techniques"}
+        
+        BC --> BC1["<b>Full Dist. Mapping</b><br/>"]
+        BC --> BC2["<b>Quantile Mapping</b><br/>"]
+        BC --> BC3["<b>Linear Regression</b><br/>"]
+        BC --> BC4["<b>Delta Technique</b><br/>"]
+    end
+
+    BC1 & BC2 & BC3 & BC4 --> SAVE[(<b>SCENARIO REPOSITORY</b><br/><i>All Processed Cases</i>)]
+
+    SAVE --> CSV["<b>📄 CSV Output</b><br/><i>Calibrated Satellite Data</i><br/>one file per scenario"]
+
+    SAVE --> COMP{<b>PERFORMANCE ANALYSIS</b><br/>Statistical Benchmarking}
+    subgraph " "
+        direction TB
+        L4["<div style='font-size:16px'><b>PHASE 3: VALIDATION</b></div>"]
+        
+        COMP --> METRICS["<b>Accuracy Metrics</b><br/>RMSE • BIAS • CC • SI"]
+    end
+
+    METRICS --> FINAL{{"<b>🏆 OPTIMAL CONFIGURATION</b><br/>Most Accurate Methodology Identification"}}
+
+    style CSV fill:#d4edda,stroke:#28a745,color:#000
+```
+
+</details>
+
+
 ## 📊 Future use
 - **Data analysis for future datasets**
 - **Integrate the workflow to other applications**
@@ -159,67 +221,3 @@ bias_correction_techniques:
 
 
 
-## Workflow ⚡
-<details>
-<summary>Workflow diagram</summary>
-
-```mermaid
-graph TD
-    %% Font e nodi stilizzati tramite sintassi nativa
-    SAT["<b>🛰️ SATELLITE ALTIMETRY</b><br/><i>Remote Sensing Dataset</i>"]
-    INS["<b>⚓ MOORING DATA</b><br/><i>In-Situ Observations</i>"]
-
-    %% Fase 1
-    subgraph " "
-        direction TB
-        L1["<div style='font-size:16px'><b>PHASE 1: SPATIO-TEMPORAL ALIGNMENT</b></div>"]
-        
-        subgraph "1a. Spatial Matching"
-            direction TB
-            SAT --> R{"Cross Radii"}
-            R --> R_OPT["• 30 km<br/>• 50 km<br/>• 70 km"]
-            R_OPT --> S_MET["<b>Spatial Methods</b><br/>• Minimum Distance<br/>• IDW Interpolation"]
-        end
-
-        subgraph "1b. Temporal Matching"
-            direction TB
-            INS --> W{"Time Window"}
-            W --> W_OPT["• 15 min<br/>• 30 min<br/>• 60 min"]
-            W_OPT --> T_MET["<b>Temporal Methods</b><br/>• Closest Observation<br/>• Mean Value Analysis"]
-        end
-    end
-
-    %% Punto di Sincronizzazione
-    S_MET --> SYNC([<b>⚡ SPATIO-TEMPORAL MATCH-UP</b>])
-    T_MET --> SYNC
-
-    %% Fase 2
-    subgraph " "
-        direction TB
-        L3["<div style='font-size:16px'><b>PHASE 2: CALIBRATION & BIAS CORRECTION</b></div>"]
-        
-        SYNC --> BC{"Correction techniques"}
-        
-        BC --> BC1["<b>Full Dist. Mapping</b><br/>"]
-        BC --> BC2["<b>Quantile Mapping</b><br/>"]
-        BC --> BC3["<b>Linear Regression</b><br/>"]
-        BC --> BC4["<b>Delta Technique</b><br/>"]
-    end
-
-    %% Fase 3
-    BC1 & BC2 & BC3 & BC4 --> SAVE[(<b>SCENARIO REPOSITORY</b><br/><i>All Processed Cases</i>)]
-    
-    SAVE --> COMP{<b>PERFORMANCE ANALYSIS</b><br/>Statistical Benchmarking}
-
-    subgraph " "
-        direction TB
-        L4["<div style='font-size:16px'><b>PHASE 3: VALIDATION</b></div>"]
-        
-        COMP --> METRICS["<b>Accuracy Metrics</b><br/>RMSE • BIAS • CC • SI"]
-    end
-
-    %% Output Finale
-    METRICS --> FINAL{{"<b>🏆 OPTIMAL CONFIGURATION</b><br/>Most Accurate Methodology Identification"}}
-```
-
-</details>
