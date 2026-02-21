@@ -2,3 +2,4 @@
 dev/
 venv/
 *.pyc
+src/utils/thesis.log
