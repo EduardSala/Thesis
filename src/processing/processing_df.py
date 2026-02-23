@@ -6,7 +6,7 @@ from io_data import load_dataframe as load_data
 from processing import spatial_matching as spatial_match
 from processing import temporal_matching as temp_match
 from pathlib import Path
-from tqdm import tqdm
+
 
 
 def align_dataframes(df_sat: pd.DataFrame, df_mooring: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -60,7 +60,7 @@ def spatio_temp_matching(params: yaml.YAMLObject) -> tuple[pd.DataFrame, pd.Data
     sat_list = []
 
     list_path_mooring = list(dir_path_mooring.glob("*.nc"))
-    for fp in tqdm(list_path_mooring, desc="Spatio-temporal matching progress"):
+    for fp in list_path_mooring:
 
         df_sat = load_data.load_sat_data_csv(dir_path_sat, cfg_var_name)
         df_mooring = load_data.load_moor_data_nc(fp, cfg_var_name, cfg_depth_val)

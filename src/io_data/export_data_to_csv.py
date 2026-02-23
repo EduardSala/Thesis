@@ -1,5 +1,6 @@
 from pathlib import Path
 import pandas as pd
+from utils.logger_setup import logger
 
 
 def export_dataframe_to_file(dataframe_insitu: pd.DataFrame, field: str, dir_output: str | Path) -> None:
@@ -19,12 +20,12 @@ def export_dataframe_to_file(dataframe_insitu: pd.DataFrame, field: str, dir_out
 
     # Guard against None or empty DataFrame
     if dataframe_insitu is None or len(dataframe_insitu) == 0:
-        print("No file has been generated!")
-        return
-
-    mooring_name = dataframe_insitu['platfID'].iloc[0]
-    output_file = dir_output / f"{mooring_name}_{field}.csv"
-    dataframe_insitu.to_csv(output_file)
+        logger.info("No file has been generated!")
+    else:
+        mooring_name = dataframe_insitu['platfID'].iloc[0]
+        output_file = dir_output / f"{mooring_name}_{field}.csv"
+        dataframe_insitu.to_csv(output_file)
+        logger.info(f"{mooring_name}file has been exported!")
 
 
 def export_dict_to_file(results_dict: dict, cfg):
@@ -35,12 +36,17 @@ def export_dict_to_file(results_dict: dict, cfg):
     """
     output_dir = Path(cfg['bias_correction_techniques']['output_dir'])
     output_dir.mkdir(exist_ok=True)
-
+    counter = 0
     for method_name, method_data in results_dict.items():
         if "df_sat_val" not in method_data:
+            logger.error("Error in dict extraction!")
             continue
 
         df_sat = method_data["df_sat_val"]
         sat_name = str(df_sat['platfID'].iloc[0])
         filepath = output_dir / f"{sat_name}_{method_name}.csv"
         df_sat.to_csv(filepath, index=False)
+        if counter == 0:
+            logger.info(
+                "After applying the bias correction technique, satellite dataframe has been exported as .csv file!")
+        counter = counter + 1

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from utils.logger_setup import logger
 
 
 def calc_haversine(lat_mooring: float, lon_mooring: float, lat_sat: np.ndarray, lon_sat: np.ndarray) -> np.ndarray:
@@ -63,10 +64,13 @@ def spatial_cross(df_s: pd.DataFrame, df_m: pd.DataFrame, cross_radius: float) -
     lat_mooring = df_mooring['latitude'].iloc[0]
     lon_mooring = df_mooring['longitude'].iloc[0]
 
+    mooring_name = df_mooring['platfID'].iloc[0]
+
     distance = calc_haversine(lat_mooring, lon_mooring, lat_sat, lon_sat)
     dist_filtered_idx = np.where(distance <= cross_radius)
 
     if len(dist_filtered_idx[0]) == 0:
+        logger.debug(f"Mooring: {mooring_name} ----- SPATIAL CROSSES: FAILED")
         return pd.DataFrame()
 
     else:
@@ -82,8 +86,7 @@ def spatial_cross(df_s: pd.DataFrame, df_m: pd.DataFrame, cross_radius: float) -
         df_sat['mooring_ref'] = np.full(len(dist_filtered_idx[0]), df_mooring['platfID'].iloc[0])
         df_sat['distance'] = distance[dist_filtered_idx[0]]
 
-        # print(f"Satellite has {(df_sat['N_cross'].iloc[-1]).astype(int)} cross-over points with
-        # {df_mooring['platfID'].iloc[0]}!")
+        logger.debug(f"Mooring: {mooring_name} ----- SPATIAL CROSSES: OK")
 
         return df_sat.reset_index(drop=True)
 
@@ -106,17 +109,29 @@ def spatial_co_loc_min_dist(df_sat_after_cross: pd.DataFrame) -> pd.DataFrame:
         Haversine distance to the mooring point
     """
 
-    # ncross_unique = np.unique(df_sat_after_cross['N_cross']).astype(int)
-    df_sat_after_cross['N_cross'] = (df_sat_after_cross['N_cross']).astype(int)
-    min_dist_idx = df_sat_after_cross.groupby('N_cross')['distance'].idxmin()
-    df_sat = df_sat_after_cross.loc[min_dist_idx]
-
-    return df_sat.reset_index(drop=True)
+    if not df_sat_after_cross.empty:
+        df_sat_after_cross['N_cross'] = (df_sat_after_cross['N_cross']).astype(int)
+        min_dist_idx = df_sat_after_cross.groupby('N_cross')['distance'].idxmin()
+        df_sat = df_sat_after_cross.loc[min_dist_idx]
+        logger.debug(f"Mooring: {df_sat_after_cross['mooring_ref'].iloc[0]} ----- "
+                     f"SPATIAL CO-LOCATION: OK")
+        return df_sat.reset_index(drop=True)
+    else:
+        logger.debug(f"SPATIAL CO-LOCATION: FAILED")
+        return pd.DataFrame()
 
 
 def spatial_matching(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, cross_radius: float) -> pd.DataFrame:
 
-    df_sat_stp1 = spatial_cross(df_sat, df_mooring, cross_radius)
-    if df_sat_stp1.empty:
-        return pd.DataFrame()
-    return spatial_co_loc_min_dist(df_sat_stp1)
+    if not df_sat.empty:
+        df_sat_stp1 = spatial_cross(df_sat, df_mooring, cross_radius)
+        df_sat_final = spatial_co_loc_min_dist(df_sat_stp1)
+        logger.info(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- SPATIAL MATCHING: OK")
+        return df_sat_final
+
+    else:
+        logger.critical(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- SPATIAL MATCHING: FAILED")
+
+
+
+
