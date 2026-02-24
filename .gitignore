@@ -4,3 +4,4 @@ venv/
 *.pyc
 src/utils/thesis.log
 scripts/logs/thesis.log
+/thesis_eduard.egg-info
