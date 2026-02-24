@@ -1,0 +1,62 @@
+INFO: Config file has been loaded!
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\AR_TS_MO_Ekofisk.nc
+DEBUG: Mooring: Ekofisk ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: Ekofisk ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: Ekofisk ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: Ekofisk ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: Ekofisk ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: Ekofisk ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_6200130.nc
+DEBUG: Mooring: 6200130 ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: 6200130 ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: 6200130 ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: 6200130 ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: 6200130 ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: 6200130 ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_6200146.nc
+DEBUG: Mooring: 6200146 ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: 6200146 ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: 6200146 ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: 6200146 ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: 6200146 ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: 6200146 ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_6300112.nc
+DEBUG: Mooring: 6300112 ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: 6300112 ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: 6300112 ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: 6300112 ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: 6300112 ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: 6300112 ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_A122.nc
+DEBUG: Mooring: A122 ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: A122 ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: A122 ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: A122 ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: A122 ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: A122 ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_F3platform.nc
+DEBUG: Mooring: F3platform ----- SPATIAL CROSSES: OK
+DEBUG: Mooring: F3platform ----- SPATIAL CO-LOCATION: OK
+INFO: Mooring: F3platform ----- SPATIAL MATCHING: OK
+DEBUG: Mooring: F3platform ----- TEMPORAL CROSSES: OK
+DEBUG: Mooring: F3platform ----- TEMPORAL CO-LOCATION: OK
+INFO: Mooring: F3platform ----- TEMPORAL MATCHING: OK 
+
+INFO: Satellite dataset has been loaded!
+DEBUG: VAVH is present inside data_vars ----- Filepath: ..\data\example\moorings_nc\NO_TS_MO_J61.nc
+DEBUG: Mooring: J61 ----- SPATIAL CROSSES: FAILED
+DEBUG: SPATIAL CO-LOCATION: FAILED
+INFO: Mooring: J61 ----- SPATIAL MATCHING: OK
+INFO: After applying the bias correction technique, satellite dataframe has been exported as .csv file!

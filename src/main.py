@@ -5,10 +5,11 @@ from calibration import calibration_methods as cal_meth
 from calibration import bc_techniques as bc_techn
 from io_data import export_data_to_csv as exp_data
 
+
 def main():
 
     # 1. Load configuration
-    cfg = lc.load_config("../config/config.yaml")
+    cfg = lc.load_config("config/config.yaml")
     # 2. Print configuration to verify it was loaded correctly
     # 3 Start spatio-temporal matching to align satellite and mooring data based on the configuration parameters
     df_sat, df_mooring = pr_df.spatio_temp_matching(cfg)
@@ -21,6 +22,7 @@ def main():
     # results using various metrics.
     results = bc_techn.bias_correction(cfg, list_dataframes)
     exp_data.export_dict_to_file(results, cfg)
+
 
 if __name__ == "__main__":
     main()
