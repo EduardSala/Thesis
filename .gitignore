@@ -5,3 +5,4 @@ venv/
 src/utils/thesis.log
 scripts/logs/thesis.log
 /thesis_eduard.egg-info
+/src/thesis_eduard.egg-info
