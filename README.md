@@ -19,6 +19,8 @@
 ## 🎯 Objective
 This projects aims to improve accuracy and reliability of satellite data for offshore wave and wind applications. The goal is to apply several bias correction techniques to calibrate satellite data against in-situ data and evaluate which technique performs best.
 
+**The processing WORKFLOW is tailored to the specific metadata and data structures of the COPERNICUS MARINE SERVICE. Consequently, full compatibility and reliable results are guaranteed only when using datasets sourced from this platform.**
+
 ## ✅ What this project does
 -	**Spatial** and **temporal** **matching** to align satellite and in-situ data so that both data can be compared
 -	To **reduce bias** in a dataset (i.e., to apply a bias correction technique), the dataset must be split into two parts: a _calibration dataset_, used to determine the calibration factors, and a _validation dataset_, used to validate the technique
@@ -202,8 +204,6 @@ bias_correction_techniques:
 - [`dev`](../dev): Development-only tools or environment setup scripts.
 - [`docs`](../docs): Project documentation, API references, manuals, and architectural diagrams.
 - [`legacy`](../legacy): Deprecated code or older versions maintained for backwards compatibility or reference.
-- [`scripts`](../scripts): Main scripts for automation, deployement...
-
 - [`data`](../data): Local storage for datasets, raw input files, or temporary databases.
   - [`example`](../data/example): Sample data files used for testing, demonstrations, or quick-start guides.
 
