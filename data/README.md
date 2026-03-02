@@ -1,11 +1,13 @@
-# 🗄️ Datasets selection
 In this section I explain why and which datasets have been used in this calibration workflow.
 
-## ⚓ In-situ data (moorings)
+# ⚓ In-situ data (moorings)
 
 In-situ data are often used as a reference value, for accuracy purposes, for the calibration and quality validation of the satellite altimetry data. Most commonly in-situ data is identified as _ground truth_ because can be seen that they deliver the most accurate data, compared to other instruments. For this work, mooring platforms have been used as the main source of in-situ data delivering.
 
 In the last two decades the number of platforms that deliver data such as wind speed, wave height, sea level an so on, has grown exponentially. In this scenario there are multiple providers that give access to all type of in-situ data, such as U.S National Data Buoy Center (_NDBC_) or Copernicus Service (_CMEMS_). For this work all the mooring platforms have been selected on the In-Situ TAC, which is is the component of the Copernicus Marine Service  guarantee a reliable access to a wide range of in-situ data. Furthermore, all the data are Near Real Time Observations (_NRT_) because we want to compare those data to the satellite altimetry data.
+
+<details>
+<summary>Dataset description</summary>
 
 Lastly, all the mooring distancing more than 100 km have been selected so that satellite measurements when selected from more than a 50 km radius, are not influenced by noise near the coast. 
 
@@ -38,23 +40,52 @@ Lastly, all the mooring distancing more than 100 km have been selected so that s
 | 6300110* | 19/05/2011 | On-going | 1.5 | 59.5 | 157 | 67.44 | Granefeltet |
 
 (* _those with the asterisk are the ones that do not deliver **wind speed data**_)
-### 🗄️ [Access to In-situ Dataset](http://data.marine.copernicus.eu/product/INSITU_GLO_PHYBGCWAV_DISCRETE_MYNRT_013_030/description)
+</details>
 
-To be precise, all the platform data has been downloaded from the [In-situ TAC Dashboard](https://marineinsitu.eu/dashboard/), where the GUI made it possible to access data in easier way.
+
+
+
+## 🗄️ How to access In-situ Data
+<details>
+<summary> Access Dataset</summary>
+
+All the platform data has been downloaded from the [In-situ TAC Dashboard](https://marineinsitu.eu/dashboard/), where the GUI made it possible to access data in easier way.
 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/a835adbb-de20-4b8a-bc15-e6b33d1ba050" width="1020">
 <br>
-<em>In-situ TAC Dashboard.</em>
+<em>In-situ TAC Dashboard view 1.</em>
 </p>
-
-
 
 ---
 
-## 🛰️ Satellite altimetry data
+<p align="center">
+<img width="1901" height="894" alt="Screenshot 2026-03-02 184329" src="https://github.com/user-attachments/assets/ebe3821a-99a3-444b-83c0-3045968284d1" />
+<br>
+<em>In-situ TAC Dashboard view 2.</em>
+</p>
+
+---
+
+<p align="center">
+<img width="1892" height="939" alt="Screenshot 2026-03-02 184926" src="https://github.com/user-attachments/assets/bcf5fcc1-2f0c-4837-b8be-f600ccb6bcdf" />
+<br>
+<em>In-situ TAC Dashboard view 3.</em>
+</p>
+
+
+After downloading moorings files, put them into the `data/example/moorings_nc`, where it will be processed into a *.csv* file. 
+### 🔗 [Link to the dataset](http://data.marine.copernicus.eu/product/INSITU_GLO_PHYBGCWAV_DISCRETE_MYNRT_013_030/description)
+
+</details>
+
+<br>
+
+# 🛰️ Satellite altimetry data
 
 For the satellite data, the following dataset has been selected from the same provider as before, CMEMS. This product is based on NRT measurements with processing level L3 of significant wave height and wind speed. The following tables summarize the main information about the entire dataset and the temporal availability for each satellite mission. More details can be found on the product page in the Copernicus data store.
+<details>
+<summary>Dataset description </summary>
 
 ### 📝 Description
 
@@ -71,6 +102,8 @@ For the satellite data, the following dataset has been selected from the same pr
 | **Temporal resolution** | Instantaneous |
 
 </div>
+
+---
 
 ### 🕓 Temporal availability
 
@@ -93,18 +126,40 @@ For the satellite data, the following dataset has been selected from the same pr
 
 </div>
 
-### 🗄️ [Access to Altimetry Dataset](https://data.marine.copernicus.eu/product/WAVE_GLO_PHY_SWH_L3_NRT_014_001/description)
+</details>
 
+<br>
 
+## 🗄️ How to access Altimetry Data
 
+<details>
+<summary>Access dataset </summary>
 
+All the satellite data are NRT and are part of the following dataset: **[Global Ocean L3 Significant Wave Height From Nrt Satellite Measurements](https://doi.org/10.48670/moi-00179)**. After reaching the dataset webpage, click on *Data access* then click on the *download data* icon.
 
+<p align="center">
+<img width="1618" height="678" alt="Screenshot 2026-03-02 190922" src="https://github.com/user-attachments/assets/a7503f24-5eca-4a0d-8a3e-dd4630f40283" />
+<br>
+<em>In-situ TAC Dashboard view 4.</em>
+</p>
 
+---
 
+Thanks to this GUI, we can select which dataset, variables, area of interest and date range.
 
+<p align="center">
+<img width="1201" height="851" alt="Screenshot 2026-03-02 191620" src="https://github.com/user-attachments/assets/5b37ebb2-fd73-4d12-bccc-a49cbe0884f1" />
+<br>
+<em>In-situ TAC Dashboard view 5.</em>
+</p>
 
+</details>
 
+<br>
 
+### This study has been conducted using E.U. Copernicus Marine Service Information:
+- **Global Ocean L3 Significant Wave Height From Nrt Satellite Measurements, DOI: [10.48670/moi-00179](https://doi.org/10.48670/moi-00179)**
+- **Global Ocean- In-Situ Near-Real-Time Observations, DOI: [10.48670/moi-00036](https://doi.org/10.48670/moi-00036)**
 
 
 
