@@ -102,8 +102,9 @@ def fdm_correction(df_sat_cal: pd.DataFrame, df_mooring_cal: pd.DataFrame, df_sa
     coef_p_fm = np.polyfit(bias_corrected_fm, x_q_fm, deg=1)
     y_val_corrected = np.polyval(coef_p_fm, y_val) + y_val
 
-    df_sat_val[variable] = y_val_corrected
     df_sat_val_final = df_sat_val.copy()
+    df_sat_val_final[variable] = y_val_corrected
+
 
     return df_sat_val_final
 
@@ -143,7 +144,7 @@ def qm_correction(df_sat_cal: pd.DataFrame, df_mooring_cal: pd.DataFrame, df_sat
 
         bias_corrected = np.interp(x=cdf_cal_mooring, xp=cdf_cal_sat, fp=y_cal_sorted)
         x_q = x_cal_sorted - np.sort(bias_corrected)
-        coef_p = np.polyfit(bias_corrected, x_q, deg=0)
+        coef_p = np.polyfit(bias_corrected, x_q, deg=2)
 
         values_corrected = np.polyval(coef_p, df_sat_val[variable].loc[mask_sat_val]) + df_sat_val[variable].loc[
             mask_sat_val]

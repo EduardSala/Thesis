@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def calib_df_first_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
+def calib_df_first_twenty_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
         -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Calibrates the satellite data using the first ten days of mooring data as the calibration set and the remaining
@@ -28,8 +28,8 @@ def calib_df_first_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
     df_mooring_copy['day'] = day
 
     # Create boolean masks for the first ten days
-    mask_cal = day <= 10
-    mask_val = day > 10
+    mask_cal = day <= 20
+    mask_val = day > 20
 
     # Use the masks directly for df_mooring_copy (same index)
     df_mooring_cal = df_mooring_copy.loc[mask_cal]
@@ -82,6 +82,6 @@ def calib_df_last_ten_days(df_mooring: pd.DataFrame, df_sat: pd.DataFrame) \
     # Use positional boolean indexing for df_sat to avoid index alignment issues
     mask_cal_array = mask_cal.to_numpy()
     mask_val_array = mask_val.to_numpy()
-    df_sat_cal = df_sat.iloc[mask_cal_array]
-    df_sat_val = df_sat.iloc[mask_val_array]
+    df_sat_cal = df_sat[mask_cal_array]
+    df_sat_val = df_sat[mask_val_array]
     return df_mooring_cal, df_sat_cal, df_mooring_val, df_sat_val

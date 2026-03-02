@@ -84,7 +84,6 @@ def temporal_co_loc_closest_measure(df_mooring_after_temp_cross: pd.DataFrame) -
         difference to the satellite point.
     """
     if not df_mooring_after_temp_cross.empty:
-        n_cross_unique = np.unique(df_mooring_after_temp_cross['N_cross']).astype(int)
         df_mooring_after_temp_cross['N_cross'] = (df_mooring_after_temp_cross['N_cross']).astype(int)
         min_delta_t_idx = df_mooring_after_temp_cross.groupby('N_cross')['deltaTime [min]'].idxmin()
         df_mooring = df_mooring_after_temp_cross.loc[min_delta_t_idx].reset_index(drop=True)
