@@ -95,7 +95,7 @@ graph TD
 
 ## 🛠️ Installation
 <details> 
-<summary>How to install dependecies</summary>
+<summary>How to install dependencies</summary>
  
 1) Create a virtual environment  
 ```bash
@@ -126,9 +126,9 @@ data_extraction:
     field: "wave"
     depth_val: 0  # value expressed in meters
   dir_paths:
-    dir_input_mooring_nc: ../data/example/moorings_nc
-    dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
+    dir_input_mooring_nc: data/example/moorings_nc
+    dir_output_mooring_csv: data/example/moorings_csv
+    dir_input_sat_csv: data/example/satellite_csv
 # ---------------------------------------------------------------------
 spatio_temp_matching:
   variable:
@@ -137,8 +137,8 @@ spatio_temp_matching:
     cross_time_val: 15
     cross_time_unit: 'm' # m / h / s
   dir_paths:
-    dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
+    dir_output_mooring_csv: data/example/moorings_csv
+    dir_input_sat_csv: data/example/satellite_csv
 # ---------------------------------------------------------------------
 bias_correction_techniques:
   technique: "linear" # "fdm" | "delta" | "qm" | "linear" | "all"
@@ -199,25 +199,22 @@ bias_correction_techniques:
 
 ## 📂 Repository Structure 
 
-- [`assets`](../assets): Static files used by the project, such as images, icons, or pre-compiled binaries.
-- [`config`](../config): Global configuration files and environment settings (e.g., `.yaml` or `.env` templates).
-- [`dev`](../dev): Development-only tools or environment setup scripts.
-- [`docs`](../docs): Project documentation, API references, manuals, and architectural diagrams.
-- [`legacy`](../legacy): Deprecated code or older versions maintained for backwards compatibility or reference.
-- [`data`](../data): Local storage for datasets, raw input files, or temporary databases.
-  - [`example`](../data/example): Sample data files used for testing, demonstrations, or quick-start guides.
+- [`assets`](assets): Static files used by the project, such as images, icons, or pre-compiled binaries.
+- [`config`](config): Global configuration files and environment settings (e.g., `.yaml` or `.env` templates).
+- [`docs`](docs): Project documentation, API references, manuals, and architectural diagrams.
+- [`legacy`](legacy): Deprecated code or older versions maintained for backwards compatibility or reference.
+- [`data`](data): Local storage for datasets, raw input files, or temporary databases.
+  - [`example`](data/example): Sample data files used for testing, demonstrations, or quick-start guides.
 
-- [`src`](../src): The primary source code for the application.
-  - [`calibration`](../src/calibration): Core algorithms for spatial and temporal matching, bias correction...
-  - [`config`](../src/config): Configuration modules to load the environment settings (e.g., `.yaml`)
-  - [`io_data`](../src/io_data): Modules handling Input/Output operations
-  - [`processing`](../src/processing): Core algorithms to process data
+- [`src`](src): The primary source code for the application.
+  - [`calibration`](src/calibration): Core algorithms for spatial and temporal matching, bias correction...
+  - [`config`](src/config): Configuration modules to load the environment settings (e.g., `.yaml`)
+  - [`io_data`](src/io_data): Modules handling Input/Output operations
+  - [`processing`](src/processing): Core algorithms to process data
 
 
 <br/>
 
-# 📢 **Status: Work in Progress** 
-*I am currently documenting the workflow and cleaning the code to better showcase the methodology used.*
 
 
 
