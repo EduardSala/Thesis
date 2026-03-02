@@ -126,9 +126,9 @@ data_extraction:
     field: "wave"
     depth_val: 0  # value expressed in meters
   dir_paths:
-    dir_input_mooring_nc: ../data/example/moorings_nc
-    dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
+    dir_input_mooring_nc: data/example/moorings_nc
+    dir_output_mooring_csv: data/example/moorings_csv
+    dir_input_sat_csv: data/example/satellite_csv
 # ---------------------------------------------------------------------
 spatio_temp_matching:
   variable:
@@ -137,8 +137,8 @@ spatio_temp_matching:
     cross_time_val: 15
     cross_time_unit: 'm' # m / h / s
   dir_paths:
-    dir_output_mooring_csv: ../data/example/moorings_csv
-    dir_input_sat_csv: ../data/example/satellite_csv
+    dir_output_mooring_csv: data/example/moorings_csv
+    dir_input_sat_csv: data/example/satellite_csv
 # ---------------------------------------------------------------------
 bias_correction_techniques:
   technique: "linear" # "fdm" | "delta" | "qm" | "linear" | "all"
@@ -215,8 +215,6 @@ bias_correction_techniques:
 
 <br/>
 
-# 📢 **Status: Work in Progress** 
-*I am currently documenting the workflow and cleaning the code to better showcase the methodology used.*
 
 
 
