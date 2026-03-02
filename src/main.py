@@ -1,6 +1,5 @@
-from config import load_configuration as lc
+import load_configuration as lc
 from processing import processing_df as pr_df
-from calibration import metrics
 from calibration import calibration_methods as cal_meth
 from calibration import bc_techniques as bc_techn
 from io_data import export_data_to_csv as exp_data

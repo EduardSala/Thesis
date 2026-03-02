@@ -1,7 +1,7 @@
 from io_data import export_data_to_csv as data_extr
 from io_data import load_dataframe as load_data
 from pathlib import Path
-from config import load_configuration
+import load_configuration
 
 
 # loading config file
