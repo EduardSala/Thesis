@@ -2,3 +2,6 @@
 dev/
 venv/
 *.pyc
+/thesis_eduard.egg-info
+/src/thesis_eduard.egg-info
+logs/

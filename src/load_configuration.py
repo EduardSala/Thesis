@@ -1,5 +1,6 @@
 import yaml
 from pathlib import Path
+from utils.logger_setup import logger
 
 
 def load_config(config_path: str | Path) -> dict:
@@ -14,11 +15,12 @@ def load_config(config_path: str | Path) -> dict:
     path = Path(config_path)
 
     if not path.exists():
-        raise FileNotFoundError(f"Config file not found: {path}")
+        logger.warning(f"Config file not found: {path}\n")
 
     try:
         with path.open("r", encoding="utf-8") as f:
+            logger.info(f"Config file has been loaded!\n")
             return yaml.safe_load(f) or {}
     except yaml.YAMLError as e:
-        raise ValueError(f"Invalid YAML in config file: {path}") from e
+        logger.error(f"Invalid YAML in config file: {path}, error: {e}\n")
 

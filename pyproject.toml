@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thesis_eduard"
+version = "0.1.0"
+description = "Progetto di tesi per l'analisi e la calibrazione dei dati"
+readme = "README.md"
+authors = [{ name = "Eduard Sala" }]
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "scipy"
+]
+
+[project.scripts]
+thesis-run = "main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

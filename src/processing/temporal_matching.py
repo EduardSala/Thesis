@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from utils.logger_setup import logger
 
 
 def temporal_cross(df_sat_after_co_loc: pd.DataFrame, df_mooring, cross_time_val: int | float, cross_time_unit: str)\
@@ -32,23 +33,34 @@ def temporal_cross(df_sat_after_co_loc: pd.DataFrame, df_mooring, cross_time_val
         A DataFrame containing the mooring data points that have been temporally matched with the satellite data points,
         along with the number of cross-over points (`N_cross`) and the time difference in minutes for each matched pair.
     """
-    t_mooring = df_mooring['time'].to_numpy(dtype='datetime64[ns]')
-    t_sat = df_sat_after_co_loc['time'].to_numpy(dtype='datetime64[ns]')
 
-    diff_time = np.abs(t_sat[:, None] - t_mooring[None, :])
+    if not df_sat_after_co_loc.empty:
+        t_mooring = df_mooring['time'].to_numpy(dtype='datetime64[ns]')
+        t_sat = df_sat_after_co_loc['time'].to_numpy(dtype='datetime64[ns]')
 
-    tol_time = np.timedelta64(cross_time_val, cross_time_unit)
-    rows, col = np.where(diff_time <= tol_time)
-    diff_time_filtered = diff_time[rows, col].astype('timedelta64[m]')
+        diff_time = np.abs(t_sat[:, None] - t_mooring[None, :])
 
-    df_mooring = df_mooring.iloc[col].reset_index(drop=True)
-    df_mooring['N_cross'] = rows + 1
-    df_mooring['N_cross'] = df_mooring['N_cross'].astype(int)
-    df_mooring['deltaTime [min]'] = diff_time_filtered
+        tol_time = np.timedelta64(cross_time_val, cross_time_unit)
+        rows, col = np.where(diff_time <= tol_time)
+        diff_time_filtered = diff_time[rows, col].astype('timedelta64[m]')
 
-    df_mooring_final = df_mooring.copy()
+        df_mooring = df_mooring.iloc[col].reset_index(drop=True)
+        df_mooring['N_cross'] = rows + 1
+        df_mooring['N_cross'] = df_mooring['N_cross'].astype(int)
+        df_mooring['deltaTime [min]'] = diff_time_filtered
 
-    return df_mooring_final
+        df_mooring_final = df_mooring.copy()
+        if not df_mooring_final.empty:
+            logger.debug(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL CROSSES: OK")
+            return df_mooring_final
+        else:
+            logger.debug(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL CROSSES: OK")
+            return pd.DataFrame()
+    else:
+        logger.debug(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- SATELLITE DATAFRAME WAS EMPTY, NO TEMPORAL "
+                     f"MATCHING HAS BEEN DONE")
+        return pd.DataFrame()
+
 
 
 def temporal_co_loc_closest_measure(df_mooring_after_temp_cross: pd.DataFrame) -> pd.DataFrame:
@@ -71,19 +83,26 @@ def temporal_co_loc_closest_measure(df_mooring_after_temp_cross: pd.DataFrame) -
         A DataFrame containing only the closest mooring data point for each cross-over point, based on the minimum time
         difference to the satellite point.
     """
-
-    n_cross_unique = np.unique(df_mooring_after_temp_cross['N_cross']).astype(int)
-    df_mooring_after_temp_cross['N_cross'] = (df_mooring_after_temp_cross['N_cross']).astype(int)
-    min_delta_t_idx = df_mooring_after_temp_cross.groupby('N_cross')['deltaTime [min]'].idxmin()
-    df_mooring = df_mooring_after_temp_cross.loc[min_delta_t_idx].reset_index(drop=True)
-
-    return df_mooring
+    if not df_mooring_after_temp_cross.empty:
+        df_mooring_after_temp_cross['N_cross'] = (df_mooring_after_temp_cross['N_cross']).astype(int)
+        min_delta_t_idx = df_mooring_after_temp_cross.groupby('N_cross')['deltaTime [min]'].idxmin()
+        df_mooring = df_mooring_after_temp_cross.loc[min_delta_t_idx].reset_index(drop=True)
+        logger.debug(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL CO-LOCATION: OK")
+        return df_mooring
+    else:
+        logger.debug(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL CO-LOCATION: OK")
+        return pd.DataFrame()
 
 
 def temporal_matching(df_sat: pd.DataFrame, df_mooring: pd.DataFrame, cross_time_val: int | float,
                       cross_time_unit: str):
-
-    df_mooring_stp1 = temporal_cross(df_sat, df_mooring, cross_time_val, cross_time_unit)
-    if df_mooring_stp1.empty:
-        return pd.DataFrame()
-    return temporal_co_loc_closest_measure(df_mooring_stp1)
+    if not df_sat.empty:
+        df_mooring_stp1 = temporal_cross(df_sat, df_mooring, cross_time_val, cross_time_unit)
+        if not df_mooring_stp1.empty:
+            df_mooring_final = temporal_co_loc_closest_measure(df_mooring_stp1)
+            logger.info(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL MATCHING: OK \n")
+            return df_mooring_final
+        else:
+            logger.info(f"Mooring: {df_mooring['platfID'].iloc[0]} ----- TEMPORAL MATCHING: FAILED\n")
+    else:
+        logger.info(f"NO SPATIO-TEMPORAL MATCHING HAS BEEN PERFORMED!\n")

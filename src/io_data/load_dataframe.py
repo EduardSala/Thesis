@@ -2,6 +2,14 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 from pathlib import Path
+from utils.logger_setup import logger
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    message=".*no explicit representation of timezones.*"
+)
 
 
 def load_sat_data_csv(filepath_sat_csv: str | Path, var_name: str) -> pd.DataFrame:
@@ -24,10 +32,11 @@ def load_sat_data_csv(filepath_sat_csv: str | Path, var_name: str) -> pd.DataFra
     """
 
     filepath_sat_csv = Path(filepath_sat_csv)
-    dataframe_sat_in = pd.read_csv(filepath_sat_csv, skiprows=5)
-    df_sat = dataframe_sat_in[dataframe_sat_in['parameter'] == var_name]
-    df_sat_out = pd.DataFrame(
-        {
+    try:
+        dataframe_sat_in = pd.read_csv(filepath_sat_csv, skiprows=5)
+        df_sat = dataframe_sat_in[dataframe_sat_in['parameter'] == var_name]
+        df_sat_out = pd.DataFrame(
+            {
             'platfID': np.full(len(df_sat), str(df_sat['platformId'].iloc[0])),
 
             'time': np.array(df_sat['time'].values, dtype='datetime64[ns]'),
@@ -39,10 +48,15 @@ def load_sat_data_csv(filepath_sat_csv: str | Path, var_name: str) -> pd.DataFra
             var_name: df_sat['value'].values,
 
             'valueQC': df_sat['valueQc'].values
-        }
-    )
-    print("Satellite data has been loaded!")
-    return df_sat_out
+            }
+        )
+        logger.info(f"Satellite dataset has been loaded!")
+        return df_sat_out
+
+    except Exception as e:
+        logger.warning(f"Satellite dataset has not been loaded."
+                       f"Error: {e}")
+
 
 
 def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, depth_val: float) -> pd.DataFrame | None:
@@ -65,31 +79,36 @@ def load_moor_data_nc(filepath_file_nc: str | Path, var_name: str, depth_val: fl
 
         If the variable name is not found in the NetCDF file or no matching depth is found, returns None.
     """
-    with xr.open_dataset(filepath_file_nc) as dataset_nc:
-        if var_name in dataset_nc.data_vars:
-            cond = abs(dataset_nc['DEPH'].values - depth_val) <= 0.5
-            idx = np.where(cond)[0]
-            # ----------------------------------------------
-            if idx.size > 0:
-                mooring_name = str(dataset_nc['STATION'].values).split(sep="'")[1]
-                variable = np.array(dataset_nc[var_name][:, idx].values).flatten()
-                time = dataset_nc['TIME'].values
-                latitude = dataset_nc['LATITUDE'].values
-                longitude = dataset_nc['LONGITUDE'].values
-                # --------------------------------------
-                dataframe_mooring = pd.DataFrame(
-                    {
-                        'platfID': np.full(len(time), mooring_name),
-                        'time': np.array(time, dtype='datetime64[ns]'),
-                        'latitude': np.full(len(time), latitude),
-                        'longitude': np.full(len(time), longitude),
-                        var_name: variable
-                    }
-                )
-                print("In-situ data has been extracted!")
-                return dataframe_mooring
-            else:
-                return None
-        else:
-            print("No dataframe has been extracted!")
-            return None
+    try:
+        with xr.open_dataset(filepath_file_nc) as dataset_nc:
+            try:
+                if var_name in dataset_nc.data_vars:
+                    cond = abs(dataset_nc['DEPH'].values - depth_val) <= 0.5
+                    idx = np.where(cond)[0]
+                    # ----------------------------------------------
+                    if idx.size > 0:
+                        mooring_name = str(dataset_nc['STATION'].values).split(sep="'")[1]
+                        variable = np.array(dataset_nc[var_name][:, idx].values).flatten()
+                        time = dataset_nc['TIME'].values
+                        latitude = dataset_nc['LATITUDE'].values
+                        longitude = dataset_nc['LONGITUDE'].values
+                        # --------------------------------------
+                        dataframe_mooring = pd.DataFrame(
+                            {
+                                'platfID': np.full(len(time), mooring_name),
+                                'time': np.array(time, dtype='datetime64[ns]'),
+                                'latitude': np.full(len(time), latitude),
+                                'longitude': np.full(len(time), longitude),
+                                var_name: variable
+                            }
+                        )
+                        logger.debug(f"{var_name} is present inside data_vars ----- "
+                                     f"Filepath: {filepath_file_nc}")
+                        return dataframe_mooring
+            except Exception:
+                logger.debug(f"{var_name} is NOT present inside data_vars ----- "
+                             f"Filepath: {filepath_file_nc}", exc_info=True)
+    except Exception as e:
+        logger.warning(f"Could not open filepath: {filepath_file_nc} ----- "
+                     f"Error: {e}")
+
